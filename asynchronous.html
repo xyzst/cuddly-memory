@@ -63,46 +63,49 @@
       //   }
       //   getRecipe();
 
-      //   const getRecipe = recId => {
-      //     return new Promise((resolve, reject) => {
-      //       setTimeout(
-      //         id => {
-      //           const recipe = {
-      //             id: id,
-      //             title: "Tomato pasta",
-      //             publisher: "Penguin"
-      //           };
-      //           resolve(recipe);
-      //         },
-      //         1500,
-      //         recId
-      //       );
-      //     });
-      //   };
+      /**
+       *  Promises ...
+       */
+      const getRecipe = recId => {
+        return new Promise((resolve, reject) => {
+          setTimeout(
+            id => {
+              const recipe = {
+                id: id,
+                title: "Tomato pasta",
+                publisher: "Penguin"
+              };
+              resolve(recipe);
+            },
+            1500,
+            recId
+          );
+        });
+      };
 
-      //   const getRelated = publisher => {
-      //     return new Promise((resolve, reject) => {
-      //       setTimeout(
-      //         pub => {
-      //           const relatedRecipeToPublisher = {
-      //             title: "Neopolitan Pizza",
-      //             publisher: pub
-      //           };
-      //           resolve(relatedRecipeToPublisher);
-      //         },
-      //         1500,
-      //         publisher
-      //       );
-      //     });
-      //   };
+      const getRelated = publisher => {
+        return new Promise((resolve, reject) => {
+          setTimeout(
+            pub => {
+              const relatedRecipeToPublisher = {
+                title: "Neopolitan Pizza",
+                publisher: pub
+              };
+              resolve(relatedRecipeToPublisher);
+            },
+            1500,
+            publisher
+          );
+        });
+      };
 
-      //   // Promises begin with the executor function, has 2 parameters (functions)
-      //   const getIds = new Promise((resolve, reject) => {
-      //     setTimeout(() => {
-      //       //   reject({ error: "failed to resolve json object" });
-      //       resolve([1, 2, 3, 4, 5, 6, 7, 8, 9]); // Indicates a "successful event", return data
-      //     }, 1500);
-      //   })
+      // Promises begin with the executor function, has 2 parameters (functions)
+      const getIds = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          //   reject({ error: "failed to resolve json object" });
+          resolve([1, 2, 3, 4, 5, 6, 7, 8, 9]); // Indicates a "successful event", return data
+        }, 1500);
+      });
       //     .then(ids => {
       //       // handler method for successful events
       //       return getRecipe(ids[0]);
@@ -118,6 +121,28 @@
       //       console.log("fail!");
       //       console.log(e);
       //     });
+
+      /**
+       * Async and await -- much easier to consume promises
+       */
+
+      // Can contain 1 or more promises
+      // await only used inside async function
+      async function getRecipesAW() {
+        const ids = await getIds; // consume w/ 'await' keyword -- stops execution until promise fulfilled
+        console.log(ids);
+        const recipe = await getRecipe(ids[0]);
+        console.log(recipe);
+        const related = await getRelated(recipe.publisher);
+        console.log(related);
+
+        return recipe; // immediately returns new Promise ...
+      }
+      //   const r = getRecipesAW();
+      //   console.log(r); // does not work since code is async
+      getRecipesAW().then(x => {
+        console.log(`*** ${x.publisher} ***`);
+      });
     </script>
   </body>
 </html>
