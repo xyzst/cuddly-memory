@@ -26,42 +26,98 @@
       /*
        * Simulating API calls to a web service ...
        */
-      function getRecipe() {
-        // API call to get back all recipes identified by this unique identifier(s)
+      //   function getRecipe() {
+      //     // API call to get back all recipes identified by this unique identifier(s)
+      //     setTimeout(() => {
+      //       const recipeIds = [1, 2, 3, 4, 5, 6, 7];
+      //       console.log(recipeIds);
+      //       recipeIds.forEach(x => {
+      //         // For each identifier
+      //         // Return the recipe ...
+      //         setTimeout(
+      //           id => {
+      //             const recipe = {
+      //               id: id,
+      //               title: "Fresh Tomato",
+      //               publisher: "Penguin"
+      //             };
+      //             console.log(recipe);
+      //             // Additionally return more recipes by this certain publisher ...
+      //             setTimeout(
+      //               publisher => {
+      //                 const recipe = {
+      //                   title: "Italian Pizza",
+      //                   publisher: "Penguin"
+      //                 };
+      //                 console.log(recipe);
+      //               },
+      //               1000,
+      //               recipe.publisher
+      //             );
+      //           },
+      //           1000,
+      //           x
+      //         );
+      //       });
+      //     }, 1500);
+      //   }
+      //   getRecipe();
+
+      const getRecipe = recId => {
+        return new Promise((resolve, reject) => {
+          setTimeout(
+            id => {
+              const recipe = {
+                id: id,
+                title: "Tomato pasta",
+                publisher: "Penguin"
+              };
+              resolve(recipe);
+            },
+            1500,
+            recId
+          );
+        });
+      };
+
+      const getRelated = publisher => {
+        return new Promise((resolve, reject) => {
+          setTimeout(
+            pub => {
+              const relatedRecipeToPublisher = {
+                title: "Neopolitan Pizza",
+                publisher: pub
+              };
+              resolve(relatedRecipeToPublisher);
+            },
+            1500,
+            publisher
+          );
+        });
+      };
+
+      // Promises begin with the executor function, has 2 parameters (functions)
+      const getIds = new Promise((resolve, reject) => {
         setTimeout(() => {
-          const recipeIds = [1, 2, 3, 4, 5, 6, 7];
-          console.log(recipeIds);
-          recipeIds.forEach(x => {
-            // For each identifier
-            // Return the recipe ...
-            setTimeout(
-              id => {
-                const recipe = {
-                  id: id,
-                  title: "Fresh Tomato",
-                  publisher: "Penguin"
-                };
-                console.log(recipe);
-                // Additionally return more recipes by this certain publisher ...
-                setTimeout(
-                  publisher => {
-                    const recipe = {
-                      title: "Italian Pizza",
-                      publisher: "Penguin"
-                    };
-                    console.log(recipe);
-                  },
-                  1000,
-                  recipe.publisher
-                );
-              },
-              1000,
-              x
-            );
-          });
+          //   reject({ error: "failed to resolve json object" });
+          resolve([1, 2, 3, 4, 5, 6, 7, 8, 9]); // Indicates a "successful event", return data
         }, 1500);
-      }
-      getRecipe();
+      })
+        .then(ids => {
+          // handler method for successful events
+          return getRecipe(ids[0]);
+        })
+        .then(recipe => {
+          return getRelated(recipe.publisher);
+        })
+        .then(recipeRelated => {
+          console.log(recipeRelated);
+        })
+        .catch(e => {
+          // handler method for "failed" events
+          console.log("fail!");
+          console.log(e);
+        });
     </script>
   </body>
 </html>
