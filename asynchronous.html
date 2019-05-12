@@ -152,7 +152,7 @@
         // Will cause a CORS issue/violation
         //   fetch("https://www.metaweather.com/api/location/2357536/");
         fetch(
-          `https://crossorigin.me/https://www.metaweather.com/api/location/${whereOnEarchId}/`
+          `https://crossorigin.me/https://www.metaweather.com/api/location/${whereOnEarthId}/`
         )
           .then(data => {
             console.log(data);
@@ -172,8 +172,34 @@
           });
       }
 
-      getWeather(2487956);
-      getWeather(44418);
+      //   getWeather(2487956);
+      //   getWeather(44418);
+
+      async function getWeatherAW(whereOnEarthId) {
+        try {
+          const result = await fetch(
+            `https://crossorigin.me/https://www.metaweather.com/api/location/${whereOnEarthId}/`
+          );
+
+          const data = await result.json();
+          const tomorrow = data.consolidated_weather[1];
+          console.log(
+            `Temperatures tomorrow ${data.title} stay between ${
+              tomorrow.min_temp
+            } and ${tomorrow.max_temp}.`
+          );
+
+          return data;
+        } catch (error) {
+          alert(error);
+        }
+      }
+      getWeatherAW(2487956);
+      let londonAW = getWeatherAW(44418);
+      //   console.log(londonAW); // does not work as expected since promises return immediately, before fullfilling. Use .then()!
+      londonAW.then(data => {
+        console.log(`Promise resolved: ${data}`);
+      });
     </script>
   </body>
 </html>
